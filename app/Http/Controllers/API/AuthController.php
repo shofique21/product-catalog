@@ -27,7 +27,7 @@ class AuthController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('productcatalog')->plainTextToken;
+        $success['accessToken'] =  $user->createToken('productcatalog')->plainTextToken;
         $success['name'] =  $user->name;
         $success['email'] =  $user->email;
 
@@ -44,10 +44,15 @@ class AuthController extends BaseController
     
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $success['token'] =  $user->createToken('productcatalog')->plainTextToken;
+            $success['accessToken'] =  $user->createToken('productcatalog')->plainTextToken;
+           // $token = $user->createToken('productcatalog')->plainTextToken;
             $success['name'] =  $user->name;
             $success['email'] =  $user->email;
-            return $this->sendResponse($success, 'User login successfully.');
+            return response()->json([
+                'accessToken' => $success['accessToken'],
+                'user' => $user,
+                'message' => "User login successfully."
+            ]);
         } else {
             return $this->sendError("Unauthorized", ['error' => 'Unauthorized']);
         }

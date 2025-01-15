@@ -14,6 +14,7 @@ class AuthController extends BaseController
 {
     public function register(Request $request): JsonResponse
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
@@ -28,6 +29,7 @@ class AuthController extends BaseController
         $user = User::create($input);
         $success['token'] =  $user->createToken('productcatalog')->plainTextToken;
         $success['name'] =  $user->name;
+        $success['email'] =  $user->email;
 
         return $this->sendResponse($success, 'User register successfully.');
     }
@@ -44,6 +46,7 @@ class AuthController extends BaseController
             $user = Auth::user();
             $success['token'] =  $user->createToken('productcatalog')->plainTextToken;
             $success['name'] =  $user->name;
+            $success['email'] =  $user->email;
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError("Unauthorized", ['error' => 'Unauthorized']);

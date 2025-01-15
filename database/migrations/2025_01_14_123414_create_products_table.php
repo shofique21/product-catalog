@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text("description")->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('stock');
+            $table->integer('minimum_stock');
             $table->timestamps();
         });
     }
